@@ -5,12 +5,30 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
+
     private static final String URL = "jdbc:mysql://localhost:3306/mydatabase";
-    private static final String USERNAME = "root"; // имя пользователя воркбенча
-    private static final String PASSWORD = "wErFg45!!!"; // пароль, соответственно
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "wErFg45!!!";
+private static Connection connection;
+
+    private Util() {
+
+    }
 
     public static Connection getConnection() throws SQLException {
-        return DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        if (connection == null || connection.isClosed()) {
+            connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        }
+        return connection;
+    }
+
+    public static void closeConnection(Connection connection) {
+        if (connection != null) {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
